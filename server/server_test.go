@@ -1,11 +1,14 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/riccardomc/teleq/models"
 )
 
 func TestSize(t *testing.T) {
@@ -17,7 +20,7 @@ func TestSize(t *testing.T) {
 
 	t.Run("Size on Stack with no elements", func(t *testing.T) {
 		expectedStatus := http.StatusOK
-		expectedContent := "0"
+		expectedContent := models.Response{"size", "0"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -25,19 +28,25 @@ func TestSize(t *testing.T) {
 		}
 
 		actualStatus := response.Code
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
+		actualContent := models.Response{}
+		decoder := json.NewDecoder(response.Body)
+		decoder.UseNumber()
+		decoder.Decode(&actualContent)
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
+		if actualContent.Operation != actualContent.Operation {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Operation, expectedContent.Operation)
+		}
+		if actualContent.Data != actualContent.Data {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Data, expectedContent.Data)
 		}
 	})
 
 	t.Run("Size on Stack with one element", func(t *testing.T) {
 		targetServer.Stack.Push("one element")
 		expectedStatus := http.StatusOK
-		expectedContent := "1"
+		expectedContent := models.Response{"size", 1}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -45,12 +54,16 @@ func TestSize(t *testing.T) {
 		}
 
 		actualStatus := response.Code
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
+		if actualContent.Operation != actualContent.Operation {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Operation, expectedContent.Operation)
+		}
+		if actualContent.Data != actualContent.Data {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Data, expectedContent.Data)
 		}
 	})
 
@@ -58,7 +71,7 @@ func TestSize(t *testing.T) {
 		targetServer.Stack.Push("another element")
 		targetServer.Stack.Push("yet another element")
 		expectedStatus := http.StatusOK
-		expectedContent := "3"
+		expectedContent := models.Response{"size", 2}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -66,12 +79,16 @@ func TestSize(t *testing.T) {
 		}
 
 		actualStatus := response.Code
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
+		if actualContent.Operation != actualContent.Operation {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Operation, expectedContent.Operation)
+		}
+		if actualContent.Data != actualContent.Data {
+			t.Errorf("Unexpected content: '%s' != '%s'", actualContent.Data, expectedContent.Data)
 		}
 	})
 }

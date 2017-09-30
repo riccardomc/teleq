@@ -1,15 +1,17 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/riccardomc/teleq/models"
 	"github.com/riccardomc/teleq/stack"
 )
 
-//StackServer
+//StackServer serves a stack through an httprouter
 type StackServer struct {
 	Stack  *stack.Stack
 	Router *httprouter.Router
@@ -17,7 +19,9 @@ type StackServer struct {
 
 func size(server *StackServer) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		fmt.Fprintln(w, server.Stack.Size())
+		w.Header().Set("Content-Type", "application/json")
+		response := models.Response{"size", server.Stack.Size()}
+		json.NewEncoder(w).Encode(response)
 	}
 }
 

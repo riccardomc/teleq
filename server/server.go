@@ -42,13 +42,16 @@ func push(server *StackServer) httprouter.Handle {
 			return
 		}
 		server.Stack.Push(value)
-		fmt.Fprintln(w, value)
+		response := models.Response{"push", value}
+		json.NewEncoder(w).Encode(response)
 	}
 }
 
 func pop(server *StackServer) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		fmt.Fprintln(w, server.Stack.Pop())
+		w.Header().Set("Content-Type", "application/json")
+		response := models.Response{"pop", server.Stack.Pop()}
+		json.NewEncoder(w).Encode(response)
 	}
 }
 

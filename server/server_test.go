@@ -149,7 +149,7 @@ func TestPush(t *testing.T) {
 	t.Run("Push on Stack with no elements", func(t *testing.T) {
 		request, _ := http.NewRequest("POST", "/push/one element", nil)
 		expectedStatus := http.StatusOK
-		expectedContent := "one element"
+		expectedContent := models.Response{"push", "one element"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -160,24 +160,23 @@ func TestPush(t *testing.T) {
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
-		}
 		actualStackContent := targetServer.Stack.Peek()
-		if actualStackContent != expectedContent {
+		if actualStackContent != expectedContent.Data {
 			t.Errorf("Unexpected stack content: '%v'", actualStackContent)
 		}
 		actualStackSize := targetServer.Stack.Size()
 		if actualStackSize != 1 {
 			t.Errorf("Unexpected stack size: '%v'", actualStackSize)
 		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 
 	t.Run("Push on Stack with one element", func(t *testing.T) {
 		request, _ := http.NewRequest("POST", "/push/another element", nil)
 		expectedStatus := http.StatusOK
-		expectedContent := "another element"
+		expectedContent := models.Response{"push", "another element"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -188,24 +187,23 @@ func TestPush(t *testing.T) {
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
-		}
 		actualStackContent := targetServer.Stack.Peek()
-		if actualStackContent != expectedContent {
+		if actualStackContent != expectedContent.Data {
 			t.Errorf("Unexpected stack content: '%v'", actualStackContent)
 		}
 		actualStackSize := targetServer.Stack.Size()
 		if actualStackSize != 2 {
 			t.Errorf("Unexpected stack size: '%v'", actualStackSize)
 		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 
 	t.Run("Push on Stack with multiple elements", func(t *testing.T) {
 		request, _ := http.NewRequest("POST", "/push/yet another element", nil)
 		expectedStatus := http.StatusOK
-		expectedContent := "yet another element"
+		expectedContent := models.Response{"push", "yet another element"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -216,18 +214,17 @@ func TestPush(t *testing.T) {
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
-		}
 		actualStackContent := targetServer.Stack.Peek()
-		if actualStackContent != expectedContent {
+		if actualStackContent != expectedContent.Data {
 			t.Errorf("Unexpected stack content: '%v'", actualStackContent)
 		}
 		actualStackSize := targetServer.Stack.Size()
 		if actualStackSize != 3 {
 			t.Errorf("Unexpected stack size: '%v'", actualStackSize)
 		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 }
 

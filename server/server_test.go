@@ -237,7 +237,7 @@ func TestPop(t *testing.T) {
 
 	t.Run("Pop on Stack with no elements", func(t *testing.T) {
 		expectedStatus := http.StatusOK
-		expectedContent := "<nil>"
+		expectedContent := models.Response{"pop", nil}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -248,16 +248,15 @@ func TestPop(t *testing.T) {
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
-		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 
 	t.Run("Pop on Stack with one element", func(t *testing.T) {
 		targetServer.Stack.Push("one element")
 		expectedStatus := http.StatusOK
-		expectedContent := "one element"
+		expectedContent := models.Response{"pop", "one element"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -267,10 +266,6 @@ func TestPop(t *testing.T) {
 		actualStatus := response.Code
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
-		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
 		}
 		actualStackContent := targetServer.Stack.Peek()
 		if actualStackContent != nil {
@@ -280,13 +275,16 @@ func TestPop(t *testing.T) {
 		if actualStackSize != 0 {
 			t.Errorf("Unexpected stack size: '%v'", actualStackSize)
 		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 
 	t.Run("Pop on Stack with multiple elements", func(t *testing.T) {
 		targetServer.Stack.Push("one element")
 		targetServer.Stack.Push("another element")
 		expectedStatus := http.StatusOK
-		expectedContent := "another element"
+		expectedContent := models.Response{"pop", "another element"}
 
 		response, err := call(targetServer, request)
 		if err != nil {
@@ -297,10 +295,6 @@ func TestPop(t *testing.T) {
 		if actualStatus != expectedStatus {
 			t.Errorf("Unexpected status: '%v'", actualStatus)
 		}
-		actualContent := strings.TrimRight(response.Body.String(), "\n\t ")
-		if actualContent != expectedContent {
-			t.Errorf("Unexpected content: '%v'", actualContent)
-		}
 		actualStackContent := targetServer.Stack.Peek()
 		if actualStackContent != "one element" {
 			t.Errorf("Unexpected stack content: '%v'", actualStackContent)
@@ -309,6 +303,9 @@ func TestPop(t *testing.T) {
 		if actualStackSize != 1 {
 			t.Errorf("Unexpected stack size: '%v'", actualStackSize)
 		}
+		actualContent := models.Response{}
+		json.NewDecoder(response.Body).Decode(&actualContent)
+		compareContent(actualContent, expectedContent, t)
 	})
 }
 

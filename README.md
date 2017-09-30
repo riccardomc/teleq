@@ -12,7 +12,7 @@ So here are some task that I would like to explore:
 
 1. [Implement a simple data structure](https://github.com/riccardomc/teleq/pull/1)
 2. [Serve the data structure via HTTP](https://github.com/riccardomc/teleq/pull/2)
-3. Serialize and deserialize the elements of the data structure (JSON?)
+3. [Serialize and deserialize the elements of the data structure (JSON)](https://github.com/riccardomc/teleq/pull/3)
 4. Build a CLI to control the behaviour of the server (port number, ...)
 5. Persist the data structure in a database
 6. Implement handling multiple data structures

@@ -28,7 +28,8 @@ func size(server *StackServer) httprouter.Handle {
 func peek(server *StackServer) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, server.Stack.Peek())
+		response := models.Response{"peek", server.Stack.Peek()}
+		json.NewEncoder(w).Encode(response)
 	}
 }
 

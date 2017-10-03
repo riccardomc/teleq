@@ -12,12 +12,13 @@ So here are some task that I would like to explore:
 
 1. [Implement a simple data structure](https://github.com/riccardomc/teleq/pull/1)
 2. [Serve the data structure via HTTP](https://github.com/riccardomc/teleq/pull/2)
-3. [Serialize and deserialize the elements of the data structure (JSON)](https://github.com/riccardomc/teleq/pull/3)
-4. Build a CLI to control the behaviour of the server (port number, ...)
-5. Persist the data structure in a database
-6. Implement handling multiple data structures
-7. Add basic authentication
-8. Serve a simple HTML frontend
+3. [Serialize responses (JSON)](https://github.com/riccardomc/teleq/pull/3)
+4. [Serialize requests (JSON)](https://github.com/riccardomc/teleq/pull/4)
+5. Build a CLI to control the behaviour of the server (port number, ...)
+6. Persist the data structure in a database
+7. Implement handling multiple data structures
+8. Add basic authentication
+9. Serve a simple HTML frontend
 
 Each of these points will be implemented following a TDD approach.
 

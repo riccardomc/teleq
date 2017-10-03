@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/riccardomc/teleq/models"
@@ -35,14 +34,16 @@ func peek(server *StackServer) httprouter.Handle {
 
 func push(server *StackServer) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, rp httprouter.Params) {
-		value, err := url.PathUnescape(rp.ByName("value"))
+		request := models.Request{}
+		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintln(w, err)
 			return
 		}
-		server.Stack.Push(value)
-		response := models.Response{"push", value}
+		defer r.Body.Close()
+		server.Stack.Push(request.Data)
+		response := models.Response{"push", request.Data}
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -59,7 +60,7 @@ func pop(server *StackServer) httprouter.Handle {
 func NewStackServer() *StackServer {
 	server := StackServer{stack.New(), httprouter.New()}
 	server.Router.GET("/peek", peek(&server))
-	server.Router.POST("/push/:value", push(&server))
+	server.Router.POST("/push", push(&server))
 	server.Router.GET("/pop", pop(&server))
 	server.Router.GET("/size", size(&server))
 	return &server

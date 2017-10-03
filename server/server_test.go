@@ -147,7 +147,8 @@ func TestPush(t *testing.T) {
 	targetServer := NewStackServer()
 
 	t.Run("Push on Stack with no elements", func(t *testing.T) {
-		request, _ := http.NewRequest("POST", "/push/one element", nil)
+		body := strings.NewReader(`{"Data": "one element"}`)
+		request, _ := http.NewRequest("POST", "/push", body)
 		expectedStatus := http.StatusOK
 		expectedContent := models.Response{"push", "one element"}
 
@@ -174,7 +175,8 @@ func TestPush(t *testing.T) {
 	})
 
 	t.Run("Push on Stack with one element", func(t *testing.T) {
-		request, _ := http.NewRequest("POST", "/push/another element", nil)
+		body := strings.NewReader(`{"Data": "another element"}`)
+		request, _ := http.NewRequest("POST", "/push", body)
 		expectedStatus := http.StatusOK
 		expectedContent := models.Response{"push", "another element"}
 
@@ -201,7 +203,8 @@ func TestPush(t *testing.T) {
 	})
 
 	t.Run("Push on Stack with multiple elements", func(t *testing.T) {
-		request, _ := http.NewRequest("POST", "/push/yet another element", nil)
+		body := strings.NewReader(`{"Data": "yet another element"}`)
+		request, _ := http.NewRequest("POST", "/push", body)
 		expectedStatus := http.StatusOK
 		expectedContent := models.Response{"push", "yet another element"}
 

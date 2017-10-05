@@ -1,9 +1,10 @@
-package server
+package stackserver
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/riccardomc/teleq/models"
@@ -14,9 +15,11 @@ import (
 type StackServer struct {
 	Stack  *stack.Stack
 	Router *httprouter.Router
+	Config *ServerConfig
 }
 
-func size(server *StackServer) httprouter.Handle {
+//Size returns the size operation handle of the server
+func (server *StackServer) Size() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json")
 		response := models.Response{"size", server.Stack.Size()}
@@ -24,7 +27,8 @@ func size(server *StackServer) httprouter.Handle {
 	}
 }
 
-func peek(server *StackServer) httprouter.Handle {
+//Peek returns the peek operation handle of the server
+func (server *StackServer) Peek() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.WriteHeader(http.StatusOK)
 		response := models.Response{"peek", server.Stack.Peek()}
@@ -32,7 +36,8 @@ func peek(server *StackServer) httprouter.Handle {
 	}
 }
 
-func push(server *StackServer) httprouter.Handle {
+//Push returns the push operation handle of the server
+func (server *StackServer) Push() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, rp httprouter.Params) {
 		request := models.Request{}
 		err := json.NewDecoder(r.Body).Decode(&request)
@@ -48,7 +53,8 @@ func push(server *StackServer) httprouter.Handle {
 	}
 }
 
-func pop(server *StackServer) httprouter.Handle {
+//Pop returns the pop operation handle of the server
+func (server *StackServer) Pop() httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json")
 		response := models.Response{"pop", server.Stack.Pop()}
@@ -56,12 +62,17 @@ func pop(server *StackServer) httprouter.Handle {
 	}
 }
 
-//NewStackServer gives you a new server, yo
-func NewStackServer() *StackServer {
-	server := StackServer{stack.New(), httprouter.New()}
-	server.Router.GET("/peek", peek(&server))
-	server.Router.POST("/push", push(&server))
-	server.Router.GET("/pop", pop(&server))
-	server.Router.GET("/size", size(&server))
+//Serve starts listening and serving
+func (server *StackServer) Serve() {
+	http.ListenAndServe(":"+strconv.Itoa(server.Config.Port), server.Router)
+}
+
+//New gives you a new server, yo
+func New(config *ServerConfig) *StackServer {
+	server := StackServer{stack.New(), httprouter.New(), config}
+	server.Router.GET("/peek", server.Peek())
+	server.Router.POST("/push", server.Push())
+	server.Router.GET("/pop", server.Pop())
+	server.Router.GET("/size", server.Size())
 	return &server
 }

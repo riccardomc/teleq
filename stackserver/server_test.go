@@ -1,4 +1,4 @@
-package server
+package stackserver
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 )
 
 func TestSize(t *testing.T) {
-	targetServer := NewStackServer()
+	targetServer := New(DefaultConfig())
 	request, err := http.NewRequest("GET", "/size", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -80,7 +80,7 @@ func TestSize(t *testing.T) {
 }
 
 func TestPeek(t *testing.T) {
-	targetServer := NewStackServer()
+	targetServer := New(DefaultConfig())
 	request, err := http.NewRequest("GET", "/peek", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -144,7 +144,7 @@ func TestPeek(t *testing.T) {
 }
 
 func TestPush(t *testing.T) {
-	targetServer := NewStackServer()
+	targetServer := New(DefaultConfig())
 
 	t.Run("Push on Stack with no elements", func(t *testing.T) {
 		body := strings.NewReader(`{"Data": "one element"}`)
@@ -232,7 +232,7 @@ func TestPush(t *testing.T) {
 }
 
 func TestPop(t *testing.T) {
-	targetServer := NewStackServer()
+	targetServer := New(DefaultConfig())
 	request, err := http.NewRequest("GET", "/pop", nil)
 	if err != nil {
 		t.Fatal(err)

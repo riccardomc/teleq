@@ -2,16 +2,16 @@ package main
 
 import (
 	"flag"
-	"net/http"
-	"strconv"
 
-	"github.com/riccardomc/teleq/server"
+	"github.com/riccardomc/teleq/stackserver"
 )
 
 func main() {
 	port := flag.Int("p", 9009, "port number")
 	flag.Parse()
 
-	server := server.NewStackServer()
-	http.ListenAndServe(":"+strconv.Itoa(*port), server.Router)
+	config := &stackserver.ServerConfig{*port}
+
+	s := stackserver.New(config)
+	s.Serve()
 }

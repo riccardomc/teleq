@@ -11,7 +11,6 @@ import (
 var (
 	serverAction = server
 	sizeAction   = size
-	emptyAction  = empty
 	pushAction   = push
 	peekAction   = peek
 	popAction    = pop
@@ -27,16 +26,6 @@ func server(c *cli.Context) error {
 func size(c *cli.Context) error {
 	client := client.TeleqClient{}
 	response, err := client.Size(c.Parent().String("api"))
-	if err != nil {
-		return err
-	}
-	fmt.Println(response)
-	return nil
-}
-
-func empty(c *cli.Context) error {
-	client := client.TeleqClient{}
-	response, err := client.Empty(c.Parent().String("api"))
 	if err != nil {
 		return err
 	}
@@ -101,11 +90,6 @@ func New() *cli.App {
 		cli.Command{
 			Name:   "size",
 			Action: sizeAction,
-		},
-
-		cli.Command{
-			Name:   "empty",
-			Action: emptyAction,
 		},
 
 		cli.Command{

@@ -26,22 +26,6 @@ func TestClient(t *testing.T) {
 		}
 	})
 
-	t.Run("Test empty", func(t *testing.T) {
-		httpmock.RegisterResponder("GET", "http://localhost:9009/empty",
-			httpmock.NewStringResponder(200, `{"Operation":"empty","Data":true}`))
-
-		client := TeleqClient{}
-		response, err := client.Empty("http://localhost:9009/")
-
-		if err != nil {
-			t.Error(err)
-			return
-		}
-		if response != true {
-			t.Errorf("'%t' != %t", response, true)
-		}
-	})
-
 	t.Run("Test peek", func(t *testing.T) {
 		httpmock.RegisterResponder("GET", "http://localhost:9009/peek",
 			httpmock.NewStringResponder(200, `{"Operation":"peek","Data":"something"}`))

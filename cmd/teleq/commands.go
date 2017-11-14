@@ -27,9 +27,10 @@ func size(c *cli.Context) error {
 	client := client.TeleqClient{}
 	response, err := client.Size(c.Parent().String("api"))
 	if err != nil {
+		fmt.Fprintln(c.App.ErrWriter, err)
 		return err
 	}
-	fmt.Println(response)
+	fmt.Fprintln(c.App.Writer, response)
 	return nil
 }
 
@@ -37,10 +38,10 @@ func push(c *cli.Context) error {
 	client := client.TeleqClient{}
 	response, err := client.Push(c.Parent().String("api"), c.String("data"))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(c.App.ErrWriter, err)
 		return err
 	}
-	fmt.Println(response)
+	fmt.Fprintln(c.App.Writer, response)
 	return nil
 }
 
@@ -48,9 +49,10 @@ func peek(c *cli.Context) error {
 	client := client.TeleqClient{}
 	response, err := client.Peek(c.Parent().String("api"))
 	if err != nil {
+		fmt.Fprintln(c.App.ErrWriter, err)
 		return err
 	}
-	fmt.Println(response)
+	fmt.Fprintln(c.App.Writer, response)
 	return nil
 }
 
@@ -58,9 +60,10 @@ func pop(c *cli.Context) error {
 	client := client.TeleqClient{}
 	response, err := client.Pop(c.Parent().String("api"))
 	if err != nil {
+		fmt.Fprintln(c.App.ErrWriter, err)
 		return err
 	}
-	fmt.Println(response)
+	fmt.Fprintln(c.App.Writer, response)
 	return nil
 }
 

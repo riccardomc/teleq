@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	serverAction = server
+	ServerAction = server
 	sizeAction   = size
 	pushAction   = push
 	peekAction   = peek
@@ -81,7 +81,7 @@ func New() *cli.App {
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name:   "server",
-			Action: serverAction,
+			Action: ServerAction,
 			Flags: []cli.Flag{
 				cli.IntFlag{
 					Name:  "port, p",

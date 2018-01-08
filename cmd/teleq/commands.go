@@ -8,19 +8,13 @@ import (
 	"github.com/urfave/cli"
 )
 
-var (
-	ServerAction = server
-	sizeAction   = size
-	pushAction   = push
-	peekAction   = peek
-	popAction    = pop
-)
-
-func server(c *cli.Context) error {
-	config := &stackserver.ServerConfig{c.Int("port")}
-	s := stackserver.New(config)
-	s.Serve()
-	return nil
+func getServerAction(server stackserver.ServerInterface) func(*cli.Context) error {
+	return func(c *cli.Context) error {
+		port := c.Int("port")
+		fmt.Fprintln(c.App.Writer, "Serving on", port)
+		server.Serve(port)
+		return nil
+	}
 }
 
 func size(c *cli.Context) error {
@@ -81,7 +75,7 @@ func New() *cli.App {
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name:   "server",
-			Action: ServerAction,
+			Action: getServerAction(Server),
 			Flags: []cli.Flag{
 				cli.IntFlag{
 					Name:  "port, p",
@@ -92,22 +86,22 @@ func New() *cli.App {
 
 		cli.Command{
 			Name:   "size",
-			Action: sizeAction,
+			Action: size,
 		},
 
 		cli.Command{
 			Name:   "peek",
-			Action: peekAction,
+			Action: peek,
 		},
 
 		cli.Command{
 			Name:   "pop",
-			Action: popAction,
+			Action: pop,
 		},
 
 		cli.Command{
 			Name:   "push",
-			Action: pushAction,
+			Action: push,
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name: "data, d",

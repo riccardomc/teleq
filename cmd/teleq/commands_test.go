@@ -2,15 +2,19 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 
 	"github.com/jarcoal/httpmock"
-	"github.com/urfave/cli"
+	"github.com/julienschmidt/httprouter"
 )
 
-func TestServer(t *testing.T) {
-}
+type MockServer struct{}
+
+func (s *MockServer) Size() httprouter.Handle { return nil }
+func (s *MockServer) Peek() httprouter.Handle { return nil }
+func (s *MockServer) Push() httprouter.Handle { return nil }
+func (s *MockServer) Pop() httprouter.Handle  { return nil }
+func (s *MockServer) Serve(port int)          {}
 
 type clientTest struct {
 	operation    string
@@ -19,6 +23,12 @@ type clientTest struct {
 	responseBody string
 	command      []string
 	expected     string
+}
+
+type serverTest struct {
+	description string
+	command     []string
+	expected    string
 }
 
 func TestClient(t *testing.T) {
@@ -84,27 +94,43 @@ func TestClient(t *testing.T) {
 
 	}
 
-	t.Run("Test server", func(t *testing.T) {
-		// Given
-		outputBuffer := bytes.NewBuffer([]byte{})
-		ServerAction = func(c *cli.Context) error {
-			fmt.Fprint(c.App.Writer, "bla")
-			return nil
-		}
-		app := New()
+}
 
-		// When
-		app.Writer = outputBuffer
-		err := app.Run([]string{"", "server"})
+func TestServer(t *testing.T) {
+	tests := []serverTest{
+		serverTest{
+			"default port",
+			[]string{"", "server"},
+			"Serving on 9009\n",
+		},
+		serverTest{
+			"custom port",
+			[]string{"", "server", "-p", "9999"},
+			"Serving on 9999\n",
+		},
+	}
 
-		// Then
-		if err != nil {
-			t.Error(err)
-		}
-		actualOutput := outputBuffer.String()
-		expectedOutput := "bla"
-		if actualOutput != expectedOutput {
-			t.Errorf("'%s' != '%s'", actualOutput, expectedOutput)
-		}
-	})
+	Server = &MockServer{}
+	outputBuffer := bytes.NewBuffer([]byte{})
+
+	for _, test := range tests {
+		t.Run("Test server "+test.description, func(t *testing.T) {
+			// Given
+			app := New()
+
+			// When
+			app.Writer = outputBuffer
+			err := app.Run(test.command)
+
+			// Then
+			if err != nil {
+				t.Error(err)
+			}
+			actual := outputBuffer.String()
+			if actual != test.expected {
+				t.Errorf("'%s' != '%s'", actual, test.expected)
+			}
+			outputBuffer.Reset()
+		})
+	}
 }

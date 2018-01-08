@@ -14,7 +14,7 @@ So here are some task that I would like to explore:
 2. [Serve the data structure via HTTP](https://github.com/riccardomc/teleq/pull/2)
 3. [Serialize responses (JSON)](https://github.com/riccardomc/teleq/pull/3)
 4. [Serialize requests (JSON)](https://github.com/riccardomc/teleq/pull/4)
-5. Build a CLI to control the behaviour of the server (port number, ...)
+5. [Build a CLI to control the behaviour of the server (port number, ...)](https://github.com/riccardomc/teleq/pull/5)
 6. Persist the data structure in a database
 7. Implement handling multiple data structures
 8. Add basic authentication

@@ -1,5 +1,5 @@
 SOURCES=$(shell find . -name '*.go')
-.PHONY=test deps deps-test run build install
+.PHONY: test deps deps-test run build install
 
 build: deps teleq
 

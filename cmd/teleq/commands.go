@@ -64,6 +64,9 @@ func pop(c *cli.Context) error {
 //New returns a new cli app
 func New() *cli.App {
 	app := cli.NewApp()
+	app.Usage = "a remote stack"
+	app.Name = "teleq"
+	app.ErrWriter = app.Writer
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{

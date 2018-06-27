@@ -10,14 +10,10 @@ install: teleq
 	go install ./cmd/teleq/
 
 deps:
-	go get "github.com/julienschmidt/httprouter"
-	go get "github.com/urfave/cli"
+	dep ensure
 
 run: teleq
 	./teleq
 
-deps-test:
-	go get "github.com/jarcoal/httpmock"
-
-test: deps-test
+test: deps
 	go test -v ./...

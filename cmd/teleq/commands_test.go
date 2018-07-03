@@ -36,7 +36,7 @@ func TestClient(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	tests := []clientTest{
-		clientTest{
+		{
 			"size",
 			"GET",
 			200,
@@ -44,7 +44,7 @@ func TestClient(t *testing.T) {
 			[]string{"", "size"},
 			"1000\n",
 		},
-		clientTest{
+		{
 			"push",
 			"POST",
 			200,
@@ -52,7 +52,7 @@ func TestClient(t *testing.T) {
 			[]string{"", "push", "-d", "1000"},
 			"1000\n",
 		},
-		clientTest{
+		{
 			"peek",
 			"GET",
 			200,
@@ -60,7 +60,7 @@ func TestClient(t *testing.T) {
 			[]string{"", "peek"},
 			"1000\n",
 		},
-		clientTest{
+		{
 			"pop",
 			"GET",
 			200,
@@ -98,12 +98,12 @@ func TestClient(t *testing.T) {
 
 func TestServer(t *testing.T) {
 	tests := []serverTest{
-		serverTest{
+		{
 			"default port",
 			[]string{"", "server"},
 			"Serving on 9009\n",
 		},
-		serverTest{
+		{
 			"custom port",
 			[]string{"", "server", "-p", "9999"},
 			"Serving on 9999\n",

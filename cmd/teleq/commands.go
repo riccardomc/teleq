@@ -76,7 +76,7 @@ func New() *cli.App {
 	}
 
 	app.Commands = []cli.Command{
-		cli.Command{
+		{
 			Name:   "server",
 			Action: getServerAction(Server),
 			Flags: []cli.Flag{
@@ -87,22 +87,22 @@ func New() *cli.App {
 			},
 		},
 
-		cli.Command{
+		{
 			Name:   "size",
 			Action: size,
 		},
 
-		cli.Command{
+		{
 			Name:   "peek",
 			Action: peek,
 		},
 
-		cli.Command{
+		{
 			Name:   "pop",
 			Action: pop,
 		},
 
-		cli.Command{
+		{
 			Name:   "push",
 			Action: push,
 			Flags: []cli.Flag{

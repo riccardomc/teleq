@@ -9,6 +9,9 @@ teleq: $(SOURCES)
 teleq-static:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $@ \
 				./cmd/teleq/main.go ./cmd/teleq/commands.go
+.PHONY: format
+format:
+	gofmt -w -s $(SOURCES)
 
 .PHONY: install
 install: teleq

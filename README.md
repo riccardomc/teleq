@@ -1,7 +1,7 @@
 # Teleq
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/riccardomc/teleq)](https://goreportcard.com/report/github.com/riccardomc/teleq)
-[![CircleCI Badge](https://circleci.com/gh/riccardomc/teleq/tree/master.png?style=shield)](https://circleci.com/gh/riccardomc/teleq/tree/master.png?style=shield)
+[![CircleCI Badge](https://circleci.com/gh/riccardomc/teleq/tree/master.png?style=shield)](https://circleci.com/gh/riccardomc/teleq/tree/master)
 
 Teleq, is a project/experiment/diary in golang. After a little less than a year
 of professional and private use of golang, I wanted to see where I am at.

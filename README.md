@@ -1,5 +1,7 @@
 # Teleq
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/riccardomc/teleq)](https://goreportcard.com/report/github.com/riccardomc/teleq)
+
 Teleq, is a project/experiment/diary in golang. After a little less than a year
 of professional and private use of golang, I wanted to see where I am at.
 

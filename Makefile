@@ -4,7 +4,7 @@ SOURCES=$(shell find . -name '*.go')
 build: deps teleq
 
 teleq: $(SOURCES)
-	go build -o $@ ./cmd/teleq/main.go ./cmd/teleq/commands.go
+	go build -i -o $@ ./cmd/teleq/main.go ./cmd/teleq/commands.go
 
 teleq-static:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $@ \
@@ -23,7 +23,7 @@ deps:
 
 .PHONY: run
 run: teleq
-	./teleq
+	./teleq server
 
 .PHONY: test
 test: deps

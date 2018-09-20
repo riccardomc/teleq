@@ -5,14 +5,31 @@ import (
 
 	"github.com/riccardomc/teleq/client"
 	"github.com/riccardomc/teleq/server"
+	"github.com/riccardomc/teleq/stack"
+	"github.com/riccardomc/teleq/stack/database"
+	"github.com/riccardomc/teleq/stack/memory"
 	"github.com/urfave/cli"
 )
 
 func getServerAction(server stackserver.ServerInterface) func(*cli.Context) error {
 	return func(c *cli.Context) error {
+		var stack stack.Stack
 		port := c.Int("port")
+		databaseURI := c.String("database")
+		if databaseURI == "" {
+			fmt.Println("Using in memory stack")
+			stack = memory.New()
+		} else {
+			fmt.Println("Using database stack")
+			stack = database.New()
+			err := stack.Init(databaseURI)
+			if err != nil {
+				fmt.Println(c.App.Writer, err)
+				return err
+			}
+		}
 		fmt.Fprintln(c.App.Writer, "Serving on", port)
-		server.Serve(port)
+		server.SetPort(port).SetStack(stack).Serve()
 		return nil
 	}
 }
@@ -83,6 +100,11 @@ func New() *cli.App {
 				cli.IntFlag{
 					Name:  "port, p",
 					Value: 9009,
+				},
+				cli.StringFlag{
+					Name:   "database, d",
+					Value:  "",
+					EnvVar: "TELEQ_DATABASE_HOST",
 				},
 			},
 		},

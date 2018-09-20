@@ -6,15 +6,20 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/julienschmidt/httprouter"
+	"github.com/riccardomc/teleq/server"
+	"github.com/riccardomc/teleq/stack"
 )
 
 type MockServer struct{}
 
-func (s *MockServer) Size() httprouter.Handle { return nil }
-func (s *MockServer) Peek() httprouter.Handle { return nil }
-func (s *MockServer) Push() httprouter.Handle { return nil }
-func (s *MockServer) Pop() httprouter.Handle  { return nil }
-func (s *MockServer) Serve(port int)          {}
+func (s *MockServer) Size() httprouter.Handle                                  { return nil }
+func (s *MockServer) Peek() httprouter.Handle                                  { return nil }
+func (s *MockServer) Push() httprouter.Handle                                  { return nil }
+func (s *MockServer) Pop() httprouter.Handle                                   { return nil }
+func (s *MockServer) SetPort(int) stackserver.ServerInterface                  { return s }
+func (s *MockServer) SetRouter(*httprouter.Router) stackserver.ServerInterface { return s }
+func (s *MockServer) SetStack(stack.Stack) stackserver.ServerInterface         { return s }
+func (s *MockServer) Serve()                                                   {}
 
 type clientTest struct {
 	operation    string

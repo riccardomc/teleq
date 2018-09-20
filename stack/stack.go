@@ -1,44 +1,10 @@
 package stack
 
-//Frame is a stack frame
-type Frame struct {
-	data interface{}
-}
-
-//Stack data structure
-type Stack struct {
-	frames []Frame
-}
-
-//New returns a new stack
-func New() *Stack {
-	return &Stack{make([]Frame, 0)}
-}
-
-//Size returns the number of elements in the stack
-func (s *Stack) Size() int {
-	return len(s.frames)
-}
-
-//Push an element in the stack
-func (s *Stack) Push(data interface{}) {
-	s.frames = append(s.frames, Frame{data})
-}
-
-//Peek returns the element at the top of the stack
-func (s *Stack) Peek() interface{} {
-	if s.Size() == 0 {
-		return nil
-	}
-
-	return s.frames[s.Size()-1].data
-}
-
-//Pop returns and removes the element at the top of the stack
-func (s *Stack) Pop() interface{} {
-	data := s.Peek()
-	if data != nil {
-		s.frames = s.frames[:s.Size()-1]
-	}
-	return data
+// Stack defines the interface of a Stack data structure
+type Stack interface {
+	Size() int
+	Push(interface{})
+	Peek() interface{}
+	Pop() interface{}
+	Init(...interface{}) error
 }
